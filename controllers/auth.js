@@ -19,12 +19,7 @@ exports.register = async (req, res, next) => {
       process.env.JWT_SECRET_KEY
     );
 
-    res
-      .cookie("access_token", token, {
-        httpOnly: true,
-      })
-      .status(201)
-      .json({ name: user.name });
+    res.status(201).json({ name: user.name, access_token: token });
   } catch (error) {
     next(error);
   }
@@ -35,6 +30,11 @@ exports.register = async (req, res, next) => {
 // @access   Public
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    return next(new ErrorResponse.badRequest("All fields are required"));
+  }
+
   try {
     const user = await User.findOne({ email }).select("+password");
     // check user
@@ -51,11 +51,8 @@ exports.login = async (req, res, next) => {
     );
 
     res
-      .cookie("access_token", token, {
-        httpOnly: true,
-      })
       .status(200)
-      .json({ name: user.name });
+      .json({ name: user.name, role: user.role, access_token: token });
   } catch (error) {
     next(error);
   }

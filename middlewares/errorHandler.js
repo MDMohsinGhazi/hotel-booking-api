@@ -16,7 +16,9 @@ const errorHandler = (err, req, res, next) => {
   }
 
   if (err.name === "ValidationError") {
-    return res.status(400).json(err.message);
+    const msg = err.message.split(":");
+
+    return res.status(400).json(msg[msg.length - 1]);
   }
 
   res.status(500).json(err.message || "Somthing went wrong");

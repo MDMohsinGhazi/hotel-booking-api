@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const connectDB = require("./services/db");
 const errorHandler = require("./middlewares/errorHandler");
@@ -19,17 +20,20 @@ app.use(express.json());
 // cookie parser
 app.use(cookieParser());
 
+app.use(cors());
 // Route File
 const authRoute = require("./routes/auth");
 const UsersRoute = require("./routes/users");
 const roomsRoute = require("./routes/rooms");
 const hotelsRoute = require("./routes/hotels");
+const bookingRoute = require("./routes/booking");
 
 // mount routes
 app.use("/api/auth", authRoute);
 app.use("/api/users", UsersRoute);
 app.use("/api/rooms", roomsRoute);
 app.use("/api/hotels", hotelsRoute);
+app.use("/api/bookings", bookingRoute);
 app.use("*", (req, res, next) => {
   next(new ErrorResponse(`${req.baseUrl} route not found`, 404));
 });

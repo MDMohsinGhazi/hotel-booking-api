@@ -21,8 +21,8 @@ const hotelSchema = new Schema({
     type: String,
     required: true,
   },
-  photos: {
-    type: [String],
+  image: {
+    type: String,
   },
   title: {
     type: String,
@@ -37,9 +37,6 @@ const hotelSchema = new Schema({
     min: 0,
     max: 5,
   },
-  rooms: {
-    type: [String],
-  },
   cheapestPrice: {
     type: Number,
     required: true,
@@ -48,6 +45,6 @@ const hotelSchema = new Schema({
     type: Boolean,
     default: false,
   },
-});
+}).index({ name: "text", city: "text" });
 
 module.exports = model("Hotel", hotelSchema);

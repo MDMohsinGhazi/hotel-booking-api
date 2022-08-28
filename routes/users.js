@@ -1,9 +1,5 @@
 const express = require("express");
-const {
-  verifyToken,
-  verifyUser,
-  verifyAdmin,
-} = require("../middlewares/verifyToken");
+const { verifyUser, verifyAdmin } = require("../middlewares/verifyToken");
 const {
   getUsers,
   getUser,
