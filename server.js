@@ -29,19 +29,19 @@ const hotelsRoute = require("./routes/hotels");
 const bookingRoute = require("./routes/booking");
 
 // mount routes
-app.use("/api/auth", authRoute);
-app.use("/api/users", UsersRoute);
-app.use("/api/rooms", roomsRoute);
-app.use("/api/hotels", hotelsRoute);
-app.use("/api/bookings", bookingRoute);
+app.use("/booking-api/auth", authRoute);
+app.use("/booking-api/users", UsersRoute);
+app.use("/booking-api/rooms", roomsRoute);
+app.use("/booking-api/hotels", hotelsRoute);
+app.use("/booking-api/bookings", bookingRoute);
 app.use("*", (req, res, next) => {
   next(new ErrorResponse(`${req.baseUrl} route not found`, 404));
 });
 app.use(errorHandler);
 
-const PORT = 5000;
+const PORT = 9000;
 app.listen(PORT, () => {
-  console.log("server is running on port 5000");
+  console.log(`server is running on port ${PORT}`);
 });
 
 // handele unhandeled promise rejection

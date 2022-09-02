@@ -19,14 +19,31 @@ exports.createHotel = async (req, res, next) => {
 };
 
 exports.getHotels = async (req, res, next) => {
-  const { city = ".*", min, max, ...others } = req.query;
+  const {
+    city,
+    min = 1,
+    max = Number.MAX_VALUE,
+    limit = 10,
+    page = 1,
+    ...others
+  } = req.query;
+  const pageNum = (page - 1) * limit;
   try {
     const hotels = await Hotel.find({
       ...others,
-      city: { $regex: city, $options: "i" },
-      cheapestPrice: { $gte: min || 1, $lte: max || Number.MAX_VALUE },
-    });
-    res.status(200).json(hotels);
+      $text: { $search: city },
+      cheapestPrice: { $gte: min, $lte: max },
+    })
+      .limit(limit)
+      .skip(pageNum);
+
+    const totalResults = await Hotel.find({
+      ...others,
+      $text: { $search: city },
+      cheapestPrice: { $gte: min, $lte: max },
+    }).countDocuments();
+
+    res.status(200).json({ totalResults, hotels });
   } catch (error) {
     next(error);
   }
@@ -66,7 +83,6 @@ exports.deleteHotel = async (req, res, next) => {
 };
 
 exports.countByCity = async (req, res, next) => {
-  console.log(req.query);
   const cities = req.query.cities.split(",");
   try {
     const count = await Promise.all(

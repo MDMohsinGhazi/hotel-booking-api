@@ -44,7 +44,6 @@ exports.getRoomById = async (req, res, next) => {
 
 exports.getRoomByHotel = async (req, res, next) => {
   const { hid } = req.params;
-  console.log(hid);
   try {
     const rooms = await Room.find({ hotel: hid });
     res.status(200).json(rooms);
