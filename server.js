@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
 const cors = require("cors");
 
 const connectDB = require("./services/db");
@@ -14,6 +15,22 @@ dotenv.config({ path: "./.env" });
 connectDB();
 
 const app = express();
+
+// Set security header
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    CrossOriginResourcePolicy: "cross-origin",
+  })
+);
+
+// cors
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 // body parser
 app.use(express.json());
